@@ -33,5 +33,9 @@
     "webpack": "^5.51.1",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.3.1"
+  },
+  "dependencies": {
+    "delaunay-triangulate": "^1.1.6",
+    "terriajs": "^8.1.13"
   }
 }

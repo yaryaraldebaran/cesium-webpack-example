@@ -1,7 +1,6 @@
 import "cesium/Widgets/widgets.css";
 import "../src/css/main.css"
 var Cesium = require('cesium')
-var triangulate = require("delaunay-triangulate")
 // Your access token can be found at: https://cesium.com/ion/tokens.
 // This is the default access token
 Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNDIwOGFhZC05NGM1LTRmOGItOTVjMS1kZmZlNDFiNjc1MzciLCJpZCI6MzEwMzgsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1OTQ3NDAzMjZ9.2VC0njaqUn3Oy4BNOKW06q3qBEWYZlmicucRG5iVgAQ";
@@ -12,7 +11,7 @@ var viewer = new Cesium.Viewer("cesiumContainer", {
 
 var modelEntity = viewer.entities.add({
       name: "milktruck",
-      position: Cesium.Cartesian3.fromDegrees(107.7747,-6.9261),
+      position: Cesium.Cartesian3.fromDegrees(-123.0744619, 44.0503706),
       model: {
         uri:
           "model3D/kotak_ifc_gltf.glb",
@@ -30,52 +29,18 @@ function createPoint(worldPosition) {
   });
   return point;
 }
-
-function createShape(worldPosition) {
-  var line = viewer.entities.add({
-    polygon: {
-      hierarchy: Cesium.PolygonHierarchy(worldPosition),
-      material: new Cesium.ColorMaterialProperty(
-        Cesium.Color.WHITE.withAlpha(0.7)
-      )
-    },
-  });
-  return line;
-}
-function createLine(worldPosition) {
-  var shape = viewer.entities.add({
-    polyline: {
-      positions: worldPosition,
-      width: 3,
-    },
-  });
-  return shape;
-}
 viewer.zoomTo(modelEntity)
 
-var activeShapePoints=[]
-var activeShape;
-var floatingPoint;
-var arrCas =[]
-var arrayCartesian = []
 var handler1 = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
 handler1.setInputAction(
   function (click) {
-    var earthPosition = viewer.scene.pickPosition(click.position);
-    arrCas = [earthPosition.x,earthPosition.y,earthPosition.z]
-    arrayCartesian.push(arrCas);
-    console.log(arrayCartesian);
+    var earthPosition = viewer.camera.pickEllipsoid(click.position);
+    console.log(earthPosition);
+    createPoint(earthPosition);
+    
     if (Cesium.defined(earthPosition)) {
-      var dynamicPositions = new Cesium.CallbackProperty(function () {
-        return activeShapePoints;
-      }, false);
-      activeShapePoints.push(earthPosition);
-      
-      //activeShapePoints.push(earthPosition);
-      createPoint(earthPosition);
-      //createLine(dynamicPositions)
-      createShape(dynamicPositions)
-  }
+      console.log("sudah terklik");
+    }
    },
    Cesium.ScreenSpaceEventType.LEFT_CLICK
 );

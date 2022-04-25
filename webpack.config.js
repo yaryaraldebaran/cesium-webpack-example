@@ -44,7 +44,8 @@ module.exports = {
             patterns: [
                 { from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' },
                 { from: path.join(cesiumSource, 'Assets'), to: 'Assets' },
-                { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }
+                { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' },
+                { from: path.join('./static', 'model'), to: 'model3D'}
             ]
         }),
         new webpack.DefinePlugin({

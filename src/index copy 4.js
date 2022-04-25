@@ -31,25 +31,14 @@ function createPoint(worldPosition) {
   return point;
 }
 
-function createShape(worldPosition) {
-  var line = viewer.entities.add({
-    polygon: {
-      hierarchy: Cesium.PolygonHierarchy(worldPosition),
-      material: new Cesium.ColorMaterialProperty(
-        Cesium.Color.WHITE.withAlpha(0.7)
-      )
-    },
-  });
-  return line;
-}
 function createLine(worldPosition) {
-  var shape = viewer.entities.add({
+  var line = viewer.entities.add({
     polyline: {
       positions: worldPosition,
       width: 3,
     },
   });
-  return shape;
+  return line;
 }
 viewer.zoomTo(modelEntity)
 
@@ -58,23 +47,25 @@ var activeShape;
 var floatingPoint;
 var arrCas =[]
 var arrayCartesian = []
-var handler1 = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+var handler1 = new Cesium.ScreenSpaceEventHandler(viewer.Scene);
 handler1.setInputAction(
   function (click) {
     var earthPosition = viewer.scene.pickPosition(click.position);
     arrCas = [earthPosition.x,earthPosition.y,earthPosition.z]
     arrayCartesian.push(arrCas);
     console.log(arrayCartesian);
+
     if (Cesium.defined(earthPosition)) {
-      var dynamicPositions = new Cesium.CallbackProperty(function () {
-        return activeShapePoints;
-      }, false);
-      activeShapePoints.push(earthPosition);
-      
+      // if (activeShapePoints.length === 0) {
+        activeShapePoints.push(earthPosition);
+        
+      //   // var dynamicPositions = new Cesium.CallbackProperty(function () {
+      //   //   return activeShapePoints;
+      //   // }, false);
+      // }
       //activeShapePoints.push(earthPosition);
       createPoint(earthPosition);
-      //createLine(dynamicPositions)
-      createShape(dynamicPositions)
+      createLine(activeShapePoints)
   }
    },
    Cesium.ScreenSpaceEventType.LEFT_CLICK
